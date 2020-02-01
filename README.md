@@ -8,7 +8,7 @@ npm start
 
 # Explanation
 
-LoginComponent has access just to the Login context, while the Note component consumes the App context (both Note and App data).
+LoginComponent has access just to the Login context, while the Note component consumes the App context (both Note and Login data).
 
 ```
 Login component context: {"state":{"username":"","authenticated":false,"pending":false,"error":false}}
