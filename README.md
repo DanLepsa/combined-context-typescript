@@ -1,44 +1,43 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Combined context typescript app offers a redux-like boilerplate implementation for Context. Split data and reducers and consume parts of state instead of the whole context.
 
-## Available Scripts
+# Usage
 
-In the project directory, you can run:
+npm install
 
-### `npm start`
+npm start
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Explanation
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+LoginComponent has access just to the Login context, while the Note component consumes the App context (both Note and App data).
 
-### `npm test`
+```
+Login component context: {"state":{"username":"","authenticated":false,"pending":false,"error":false}}
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Note component context: {"state":{"login":{"username":"","authenticated":false,"pending":false,"error":false},"note":{"id":"","userId":"","title":"","completed":false}}}
+```
 
-### `npm run build`
+# Structure
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+/components
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+- The component.tsx file receives as props context: LoginContextInterface (or any other context) and in the index.ts file the withLoginContext wraps the component to inject the context
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+/context
 
-### `npm run eject`
+- Each context folder has actions, reducer and state. While the first two are self explanatory and follow the same rules as redux, the state.tsx file contains the Context Interface, provider and consumer and withContext hoc which is used by a component
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+/context/state.tsx
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- main state of the application, along with reducer.ts. Similar to a rootReducer, or main state in redux, but here it's not needed at all. you can just have your contexts separated
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+ComposeContexts.tsx
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- function to combine all the contexts and their values and avoid nesting
 
-## Learn More
+App.tsx
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- useReducer hoc is used along side useCombinedReducers to create a part of the state, respectively, the whole state. useMemo is used for optimization and logger is used for loggin actions.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Author
+
+Dan Lepsa @ https://github.com/DanLepsa
